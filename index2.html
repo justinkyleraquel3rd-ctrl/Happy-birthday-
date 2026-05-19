@@ -1,0 +1,613 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Happy Birthday ❤️</title>
+
+  <style>
+    *{
+      margin:0;
+      padding:0;
+      box-sizing:border-box;
+      font-family:Arial,sans-serif;
+    }
+
+    body{
+      background:linear-gradient(to bottom,#c8a2ff,#dff4ff);
+      min-height:100vh;
+      display:flex;
+      justify-content:center;
+      align-items:center;
+      padding:20px;
+      overflow-x:hidden;
+      position:relative;
+    }
+
+    .card{
+      width:100%;
+      max-width:420px;
+      background:#dff4ff;
+      border-radius:25px;
+      padding:25px;
+      box-shadow:0 10px 30px rgba(0,0,0,0.15);
+      text-align:center;
+      animation:fadeIn 1.2s ease;
+      position:relative;
+      z-index:2;
+    }
+
+    h1{
+      color:#7b3fe4;
+      font-size:2.2rem;
+      margin-bottom:10px;
+    }
+
+    .emoji{
+      font-size:4rem;
+      animation:bounce 2s infinite;
+    }
+
+    p{
+      margin-top:15px;
+      line-height:1.8;
+      color:#555;
+      font-size:1rem;
+    }
+
+    .memory-box{
+      margin-top:20px;
+      background:#efe4ff;
+      padding:15px;
+      border-radius:18px;
+    }
+
+    .memory-box h3{
+      color:#7b3fe4;
+      margin-bottom:8px;
+    }
+
+    .love{
+      margin-top:25px;
+      font-size:1.2rem;
+      color:#7b3fe4;
+      font-weight:bold;
+      animation:pulse 2s infinite;
+    }
+
+    /* TYPING LETTER */
+    #typingLetter{
+      min-height:120px;
+      white-space:pre-line;
+      border-right:3px solid #7b3fe4;
+      animation:blink 0.7s infinite;
+      text-align:left;
+      padding:10px;
+    }
+
+    @keyframes blink{
+      50%{
+        border-color:transparent;
+      }
+    }
+
+    /* SLIDESHOW */
+    .slideshow{
+      margin-top:15px;
+      position:relative;
+      width:100%;
+      height:350px;
+      border-radius:15px;
+      overflow:hidden;
+      background:white;
+    }
+
+    .slideshow img{
+      width:100%;
+      height:100%;
+      object-fit:contain;
+      position:absolute;
+      top:0;
+      left:0;
+      opacity:0;
+      transition:opacity 1s ease;
+    }
+
+    .slideshow img.active{
+      opacity:1;
+    }
+
+    /* GAME */
+    #gameArea{
+      width:100%;
+      height:250px;
+      background:#caa8ff;
+      border-radius:20px;
+      margin-top:15px;
+      position:relative;
+      overflow:hidden;
+    }
+
+    .heart{
+      position:absolute;
+      font-size:2rem;
+      cursor:pointer;
+      animation:fall linear forwards;
+      user-select:none;
+    }
+
+    /* CUTE LEADERBOARD */
+    .cute-board{
+      background:linear-gradient(
+        to bottom,
+        #f6e6ff,
+        #dff4ff
+      );
+
+      border:3px solid #caa8ff;
+    }
+
+    .leaderboard-item{
+      display:flex;
+      justify-content:space-between;
+      align-items:center;
+      padding:12px 15px;
+      margin-top:10px;
+      border-radius:15px;
+      background:white;
+      font-size:1.1rem;
+      font-weight:bold;
+      color:#7b3fe4;
+      box-shadow:0 5px 10px rgba(0,0,0,0.08);
+    }
+
+    .winner{
+      background:linear-gradient(
+        to right,
+        #ffe27a,
+        #fff4c2
+      );
+
+      color:#8a5a00;
+
+      transform:scale(1.03);
+
+      animation:winnerGlow 2s infinite;
+    }
+
+    .leaderboard-text{
+      margin-top:12px;
+      color:#7b3fe4;
+      font-weight:bold;
+      font-size:0.95rem;
+    }
+
+    @keyframes winnerGlow{
+      0%{
+        box-shadow:0 0 5px #ffe27a;
+      }
+
+      50%{
+        box-shadow:0 0 20px #ffe27a;
+      }
+
+      100%{
+        box-shadow:0 0 5px #ffe27a;
+      }
+    }
+
+    /* LOCK SCREEN */
+    .lock-screen{
+      position:fixed;
+      top:0;
+      left:0;
+      width:100%;
+      height:100%;
+      background:linear-gradient(to bottom,#7b3fe4,#c8a2ff);
+      display:flex;
+      flex-direction:column;
+      justify-content:center;
+      align-items:center;
+      z-index:999;
+      color:white;
+      text-align:center;
+      padding:20px;
+    }
+
+    .lock-screen input{
+      padding:12px;
+      border-radius:10px;
+      border:none;
+      margin-top:10px;
+      width:220px;
+      text-align:center;
+      font-size:1rem;
+    }
+
+    .lock-screen button{
+      margin-top:10px;
+      padding:10px 20px;
+      border:none;
+      border-radius:10px;
+      background:white;
+      color:#7b3fe4;
+      font-weight:bold;
+      cursor:pointer;
+    }
+
+    audio{
+      display:none;
+    }
+
+    /* FLOATING NAMES */
+    .floating-name{
+      position:fixed;
+      color:#ffffff;
+      font-size:1.3rem;
+      font-weight:bold;
+      pointer-events:none;
+      animation:floatUp linear infinite;
+      text-shadow:0 0 15px #7b3fe4;
+      z-index:9999;
+    }
+
+    @keyframes floatUp{
+      from{
+        transform:translateY(100vh);
+        opacity:0;
+      }
+
+      10%{
+        opacity:1;
+      }
+
+      100%{
+        transform:translateY(-120px);
+        opacity:0;
+      }
+    }
+
+    @keyframes bounce{
+      0%,100%{
+        transform:translateY(0);
+      }
+
+      50%{
+        transform:translateY(-10px);
+      }
+    }
+
+    @keyframes pulse{
+      0%{
+        transform:scale(1);
+      }
+
+      50%{
+        transform:scale(1.05);
+      }
+
+      100%{
+        transform:scale(1);
+      }
+    }
+
+    @keyframes fadeIn{
+      from{
+        opacity:0;
+        transform:translateY(20px);
+      }
+
+      to{
+        opacity:1;
+        transform:translateY(0);
+      }
+    }
+
+    @keyframes fall{
+      from{
+        top:-30px;
+      }
+
+      to{
+        top:260px;
+      }
+    }
+  </style>
+</head>
+
+<body>
+
+  <!-- LOCK SCREEN -->
+  <div class="lock-screen" id="lockScreen">
+
+    <h1>🔒 Secret Surprise</h1>
+
+    <p>
+      Enter password to unlock your birthday gift 💜 Hint the floating names 💙
+    </p>
+
+    <input
+      type="password"
+      id="passwordInput"
+      placeholder="Enter password"
+    >
+
+    <button onclick="checkPassword()">
+      Unlock
+    </button>
+
+    <p id="error"></p>
+
+  </div>
+
+  <!-- MAIN CARD -->
+  <div class="card" id="mainContent" style="display:none;">
+
+    <div class="emoji">🎂</div>
+
+    <h1>Happy Birthday ❤️</h1>
+
+    <p>
+      Even though we are far away from each other,
+      you are always close to my heart.
+    </p>
+
+    <!-- STORY -->
+    <div class="memory-box">
+      <h3>💌 Our Story</h3>
+
+      <p>
+        Distance means nothing when someone means everything 💙
+      </p>
+    </div>
+
+    <!-- MEMORIES -->
+    <div class="memory-box">
+
+      <h3>📸 Memories</h3>
+
+      <div class="slideshow">
+        <img src="photo1.jpg" class="active">
+        <img src="photo2.jpg">
+        <img src="photo3.jpg">
+        <img src="photo4.jpg">
+        <img src="photo5.jpg">
+        <img src="photo6.jpg">
+      </div>
+
+    </div>
+
+    <!-- LOVE LETTER -->
+    <div class="memory-box">
+
+      <h3>💌 Love Letter</h3>
+
+      <p id="typingLetter"></p>
+
+    </div>
+
+    <!-- FUTURE -->
+    <div class="memory-box">
+
+      <h3>✨ Future Together</h3>
+
+      <p>
+        One day, we will celebrate together 💜
+      </p>
+
+    </div>
+
+    <!-- LOVE -->
+    <div class="love">
+      I Love You So Much 💕
+    </div>
+
+    <!-- GAME -->
+    <div class="memory-box">
+
+      <h3>🎮 Catch The Hearts Game</h3>
+
+      <h2 id="score">Your Score: 0</h2>
+
+      <div id="gameArea"></div>
+
+      <!-- CUTE LEADERBOARD -->
+      <div class="memory-box cute-board">
+
+        <h3>🏆 Love Leaderboard</h3>
+
+        <div class="leaderboard-item winner">
+          <span>👑 Justin</span>
+          <span>∞</span>
+        </div>
+
+        <div class="leaderboard-item">
+          <span>💜 Collen</span>
+          <span id="collenScore">0</span>
+        </div>
+
+        <p class="leaderboard-text">
+          Justin will always win your heart 💕
+        </p>
+
+      </div>
+
+    </div>
+
+    <!-- MUSIC -->
+    <audio id="bgMusic" autoplay loop playsinline>
+      <source src="music.mp3" type="audio/mp3">
+    </audio>
+
+  </div>
+
+  <script>
+
+    /* PASSWORD */
+    function checkPassword(){
+
+      const input =
+        document.getElementById("passwordInput").value;
+
+      if(input === "Collen loves Justin"){
+
+        document.getElementById("lockScreen")
+          .style.display = "none";
+
+        document.getElementById("mainContent")
+          .style.display = "block";
+
+        music.play();
+
+      }else{
+
+        document.getElementById("error")
+          .innerText = "Wrong password 💔";
+      }
+    }
+
+    /* MUSIC */
+    const music =
+      document.getElementById("bgMusic");
+
+    window.addEventListener("load",()=>{
+
+      music.play().catch(()=>{});
+
+    });
+
+    /* HEART GAME */
+    const gameArea =
+      document.getElementById("gameArea");
+
+    const scoreText =
+      document.getElementById("score");
+
+    const popSound = new Audio("pop.mp3");
+
+    let score = 0;
+
+    function createHeart(){
+
+      const heart =
+        document.createElement("div");
+
+      heart.classList.add("heart");
+
+      heart.innerHTML = "💜";
+
+      heart.style.left =
+        Math.random() * 85 + "%";
+
+      heart.style.animationDuration =
+        (Math.random() * 3 + 2) + "s";
+
+      gameArea.appendChild(heart);
+
+      heart.addEventListener("click",()=>{
+
+        popSound.currentTime = 0;
+        popSound.play();
+
+        score++;
+
+        scoreText.innerText =
+          "Your Score: " + score;
+
+        document.getElementById("collenScore")
+          .innerText = score;
+
+        heart.remove();
+
+      });
+
+      setTimeout(()=>{
+        heart.remove();
+      },5000);
+    }
+
+    setInterval(createHeart,900);
+
+    /* SLIDESHOW */
+    const slides =
+      document.querySelectorAll(".slideshow img");
+
+    let index = 0;
+
+    setInterval(()=>{
+
+      slides[index].classList.remove("active");
+
+      index =
+        (index + 1) % slides.length;
+
+      slides[index].classList.add("active");
+
+    },2500);
+
+    /* FLOATING LOVE NAMES */
+    function createFloatingName(){
+
+      const name =
+        document.createElement("div");
+
+      name.classList.add("floating-name");
+
+      name.innerHTML =
+        "💜 Collen loves Justin 💜";
+
+      name.style.left =
+        Math.random() * 90 + "vw";
+
+      name.style.animationDuration =
+        (Math.random() * 5 + 5) + "s";
+
+      document.body.appendChild(name);
+
+      setTimeout(()=>{
+        name.remove();
+      },10000);
+    }
+
+    setInterval(createFloatingName,1200);
+
+    /* TYPING LOVE LETTER */
+    const letter =
+`Happy Birthday My Love 💜
+
+No matter how far we are,
+my heart will always choose you.
+
+Thank you for staying,
+for loving me,
+and for making my life happier.
+
+One day we will close this distance
+and finally celebrate together.
+
+I love you forever 💕`;
+
+    const typingElement =
+      document.getElementById("typingLetter");
+
+    let letterIndex = 0;
+
+    function typeLetter(){
+
+      if(letterIndex < letter.length){
+
+        typingElement.innerHTML +=
+          letter.charAt(letterIndex);
+
+        letterIndex++;
+
+        setTimeout(typeLetter,45);
+      }
+    }
+
+    setTimeout(typeLetter,1500);
+
+  </script>
+
+</body>
+</html>
